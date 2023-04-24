@@ -1,8 +1,6 @@
-using SkinRenderer.Data;
-
 namespace SkinRenderer.Renderer;
 
-public class FullRenderer
+public static class FullRenderer
 {
     private static readonly List<List<int>> Parts = new()
     {
@@ -29,13 +27,13 @@ public class FullRenderer
         new List<int> { 44, 36, 3, 12, 1, 8 } // RIGHT ARM 3 OVERYLAY
     };
     
-    public static void Render(Player player, int scale = 1, bool overlay = true, bool slim = false)
+    public static void Render(string fileName, int scale = 1, bool overlay = true, bool slim = false)
     {
         using var result = new Image<Rgba32>(16, 32);
 
         result.Mutate(context =>
         {
-            using var skin = Image.Load($"{player.Username}.png");
+            using var skin = Image.Load($"{fileName}.png");
 
             var images = Parts.Select(part => skin.Clone(processingContext => processingContext.Crop(new Rectangle(part[0], part[1], part[2], part[3])))).ToList();
 
@@ -65,6 +63,6 @@ public class FullRenderer
             context.Resize(16 * scale, 32 * scale, KnownResamplers.NearestNeighbor);
         });
 
-        result.Save($"{player.Username}-full.png");
+        result.Save($"{fileName}-full.png");
     }
 }

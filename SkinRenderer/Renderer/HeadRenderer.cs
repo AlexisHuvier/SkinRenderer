@@ -1,5 +1,3 @@
-using SkinRenderer.Data;
-
 namespace SkinRenderer.Renderer;
 
 public static class HeadRenderer
@@ -10,13 +8,13 @@ public static class HeadRenderer
         new List<int> { 40, 8, 8, 8, 0, 0 } // HEAD OVERLAY
     };
     
-    public static void Render(Player player, int scale = 1, bool overlay = true)
+    public static void Render(string fileName, int scale = 1, bool overlay = true)
     {
         using var result = new Image<Rgba32>(8, 8);
 
         result.Mutate(context =>
         {
-            using var skin = Image.Load($"{player.Username}.png");
+            using var skin = Image.Load($"{fileName}.png");
 
             var images = Parts.Select(part => skin.Clone(processingContext => processingContext.Crop(new Rectangle(part[0], part[1], part[2], part[3])))).ToList();
 
@@ -27,6 +25,6 @@ public static class HeadRenderer
             context.Resize(8 * scale, 8 * scale, KnownResamplers.NearestNeighbor);
         });
 
-        result.Save($"{player.Username}-head.png");
+        result.Save($"{fileName}-head.png");
     }
 }
