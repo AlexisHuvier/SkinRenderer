@@ -1,4 +1,5 @@
 ﻿using SkinRenderer.Data;
+using SkinRenderer.Data.Skin;
 using SkinRenderer.Renderer;
 using SkinRenderer.Utils;
 
@@ -11,6 +12,7 @@ internal static class Program
         if (args.Length >= 2)
         {
             string file;
+            var slim = args is [_, _, _, "slim", ..];
             if (args[0].Contains('.'))
             {
                 var fileParts = args[0].Split(".");
@@ -23,13 +25,14 @@ internal static class Program
 
                 player.Skin.Download();
                 file = player.Username;
+                slim = player.Skin is Skin3;
             }
 
             switch (args[1])
             {
                 case "full":
                 {
-                    FullRenderer.Render(file, args.Length >= 3 && int.TryParse(args[2], out var scale) ? scale : 5, true, args is [_, _, _, "slim", ..]);
+                    FullRenderer.Render(file, args.Length >= 3 && int.TryParse(args[2], out var scale) ? scale : 5, true, slim);
                     Console.WriteLine("Rendu fait.");
                     break;
                 }

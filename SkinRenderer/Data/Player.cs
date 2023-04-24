@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using SkinRenderer.Data.Skin;
 
 namespace SkinRenderer.Data;
 
@@ -10,7 +11,7 @@ public class Player
     public string Username = "";
     public string Uuid = "";
     public Profile Profile = new();
-    public Skin Skin = new();
+    public ISkin Skin = new Skin4();
     
     public Player(string username)
     {
@@ -64,8 +65,16 @@ public class Player
         if (response.StatusCode == HttpStatusCode.OK)
         {
             Profile = JsonSerializer.Deserialize<Profile>(response.Content.ReadAsStringAsync().Result)!;
-            Skin = JsonSerializer.Deserialize<Skin>(
-                Encoding.UTF8.GetString(Convert.FromBase64String(Profile.GetSkinBase64())))!;
+            try
+            {
+                Skin = JsonSerializer.Deserialize<Skin4>(
+                    Encoding.UTF8.GetString(Convert.FromBase64String(Profile.GetSkinBase64())))!;
+            }
+            catch (Exception)
+            {
+                Skin = JsonSerializer.Deserialize<Skin3>(
+                    Encoding.UTF8.GetString(Convert.FromBase64String(Profile.GetSkinBase64())))!;
+            }
         }
         else
         {

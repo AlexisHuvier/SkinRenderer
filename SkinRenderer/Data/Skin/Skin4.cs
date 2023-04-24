@@ -1,11 +1,11 @@
-namespace SkinRenderer.Data;
+namespace SkinRenderer.Data.Skin;
 
-public class Skin
+public class Skin4: ISkin
 {
     public long timestamp { get; set; }
-    public string profileId { get; set; }
-    public string profileName { get; set; }
-    public Dictionary<string, Dictionary<string, string>> textures { get; set; }
+    public string profileId { get; set; } = "";
+    public string profileName { get; set; } = "";
+    public Dictionary<string, Dictionary<string, string>> textures { get; set; } = new();
 
     public string GetSkinUrl() => textures["SKIN"]["url"];
 
